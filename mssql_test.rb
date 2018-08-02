@@ -12,7 +12,7 @@ Encoding.default_internal='utf-8'   # задаем кодировку utf-8 дл
 
 # конфигурация работы с таблицой
 @db_table1 = "dbo.Movements"        # таблица к которой обращаемся
-@db_limit = "TOP 1"                # ограничиваем количество возвращаемых строк
+@db_limit = "TOP 3"                # ограничиваем количество возвращаемых строк
 @db_what = "*"                      # какие столбцы запрашиваем
 @db_where = ""                      # фильтруем по условию
 @db_group = ""                      # группируем ли?
@@ -27,12 +27,18 @@ tables_list.each(:symbolize_keys => false) do |row|
 puts row
 end
 
+puts ""
+puts "Введите имя таблицы:"
+@select_table = gets.chomp
+puts ""
+
 # получаем список столбцов таблицы
-columns_list = client.execute("SELECT name FROM sys.columns WHERE object_id = OBJECT_ID('dbo.Movements')")
+columns_list = client.execute("SELECT name FROM sys.columns WHERE object_id = OBJECT_ID('dbo.#{@select_table}')")
 columns_list.each(:symbolize_keys => false) do |row|
 puts row
 end
 
+puts ""
 
 # вызываем выборку
 results = client.execute("SELECT #{@db_limit} #{@db_what} FROM #{@db_table1} #{@db_where} #{@db_group} #{@db_order}")
@@ -40,4 +46,5 @@ results = client.execute("SELECT #{@db_limit} #{@db_what} FROM #{@db_table1} #{@
 # выводим каждую строку через puts
 results.each(:symbolize_keys => false) do |row|
 puts row
+puts ""
 end
