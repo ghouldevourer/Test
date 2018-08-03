@@ -1,0 +1,15 @@
+# конфигурация подключения к серверу MSSQL
+mssql_dataserver: "user-pc1\\wincc"  # сервер на котором база данных # \\ тут не спроста, именно двойной!!!
+mssql_name: "MESDB"                  # имя базы данных
+mssql_user: "sa"                     # логин
+mssql_pass: "13245768"               # пароль
+mssql_port: 1433                     # порт сервера
+mssql_azure: false                   # Azure? True или False?
+
+# конфигурация работы с таблицой
+mssql_table1: "dbo.Movements"        # таблица к которой обращаемся
+mssql_limit: "TOP 3"                # ограничиваем количество возвращаемых строк
+mssql_what: "*"                      # какие столбцы запрашиваем
+mssql_where: ""                      # фильтруем по условию
+mssql_group: ""                      # группируем ли?
+mssql_order: ""                      # сортируем ли?
