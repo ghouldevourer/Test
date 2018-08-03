@@ -11,7 +11,7 @@ config = YAML.load_file(File.join(File.dirname(__FILE__),'config/', 'config.yml'
 ########################################################################################################################################################################################
 # конфигурация подключения к серверу MSSQL
 $mssql_dataserver = config['mssql_dataserver']  # сервер на котором база данных # \\ тут не спроста, именно двойной!!!
-$mssql_name = config['mssql_name']              # имя базы данных
+$mssql_db = config['mssql_db']                  # имя базы данных
 $mssql_user = config['mssql_user']              # логин
 $mssql_pass = config['mssql_pass']              # пароль
 $mssql_port = config['mssql_port']              # порт сервера
@@ -26,6 +26,8 @@ $mssql_group = config['mssql_group']            # группируем ли?
 $mssql_order = config['mssql_order']            # сортируем ли?
 
 ########################################################################################################################################################################################
+
+$for_query = ''                                 # переменная для будущего INSERT в postgre
 
 # подключаемся к базе данных
 client = TinyTds::Client.new(username: $mssql_user, password: $mssql_pass, dataserver: $mssql_dataserver, port: $mssql_port, database: $mssql_name, azure: $mssql_azure)
@@ -44,13 +46,30 @@ puts ""
 # получаем список столбцов таблицы
 columns_list = client.execute("SELECT name FROM sys.columns WHERE object_id = OBJECT_ID('dbo.#{@select_table}')")
 columns_list.each(:symbolize_keys => false) do |row|
-  puts row
+  print row['name']+" "
   end
 puts ""
+
+# Output: ID StartDate StopDate Line Sorg Dest Qta TypeMovement SP Note SIDC DIDC Status Operatore ServerName
+
 
 # вызываем выборку
 query = client.execute("SELECT #{$mssql_limit} #{$mssql_what} FROM dbo.#{@select_table} #{$mssql_where} #{$mssql_group} #{$mssql_order}")
 query.each(:symbolize_keys => false) do |row|
-  puts row
+  print row['ID']; print ","; print " ";
+  print "'"; print row['StartDate']; print "'"; print ","; print " ";
+  print "'"; print row['StopDate']; print "'"; print ","; print " ";
+  print "'"; print row['Line']; print "'"; print ","; print " ";
+  print "'"; print row['Sorg']; print "'"; print ","; print " ";
+  print "'"; print row['Dest']; print "'"; print ","; print " ";
+  print "'"; print row['Qta']; print "'"; print ","; print " ";
+  print "'"; print row['TypeMovement']; print "'"; print ","; print " ";
+  print "'"; print row['SP']; print "'"; print ","; print " ";
+  print "'"; print row['Note']; print "'"; print ","; print " ";
+  print "'"; print row['SIDC']; print "'"; print ","; print " ";
+  print "'"; print row['DIDC']; print "'"; print ","; print " ";
+  print "'"; print row['Status']; print "'"; print ","; print " ";
+  print "'"; print row['Operatore']; print "'"; print ","; print " ";
+  print "'"; print row['ServerName']; print "'"; print ","; print " ";
   puts ""
   end
