@@ -1,1 +1,1 @@
-require_relative "migrate_redis.rb"
+require_relative "migrate_sql.rb"
